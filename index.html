@@ -56,11 +56,11 @@ const LS = (k) => `pmSim_w${WEEK}_${k}`;
 
 // ─── SIMULATION CATALOG ────────────────────────────────────
 const CATALOG = [
-  { week:1, company:'Airbnb', topic:'PM Fundamentals', emoji:'🏠', color:'#FF5A5F', url:'https://cxosimulabs.github.io/pm-simulations/week1-airbnb-pm-fundamentals.html' },
-  { week:2, company:'Spotify', topic:'Strategic Thinking', emoji:'🎵', color:'#1DB954', url:'https://cxosimulabs.github.io/pm-simulations/week2-spotify-strategic-thinking.html' },
-  { week:3, company:'Netflix', topic:'Customer Discovery', emoji:'🎬', color:'#E50914', url:'https://cxosimulabs.github.io/pm-simulations/week3-netflix-customer-discovery.html' },
-  { week:4, company:'Amazon Prime', topic:'Prioritisation Frameworks', emoji:'📦', color:'#FF9900', url:'https://cxosimulabs.github.io/pm-simulations/week4-amazon-prioritization.html' },
-  { week:5, company:'Uber', topic:'Problem Definition', emoji:'🚗', color:'#000000', url:'https://cxosimulabs.github.io/pm-simulations/week5-uber-problem-definition.html' },
+  { week:1, company:'Airbnb', topic:'PM Fundamentals', emoji:'🏠', color:'#FF5A5F', url:'https://mohansimham.github.io/The-PM-Simulator/' },
+  { week:2, company:'Spotify', topic:'Strategic Thinking', emoji:'🎵', color:'#1DB954', url:'https://mohansimham.github.io/week2spotify/' },
+  { week:3, company:'Netflix', topic:'Customer Discovery', emoji:'🎬', color:'#E50914', url:'https://mohansimham.github.io/SIM-3-PM/' },
+  { week:4, company:'Amazon Prime', topic:'Prioritisation Frameworks', emoji:'📦', color:'#FF9900', url:'https://mohansimham.github.io/index.html/' },
+  { week:5, company:'Uber', topic:'Problem Definition', emoji:'🚗', color:'#000000', url:'https://mohansimham.github.io/PM-SIM-5/' },
 ];
 
 // ─── FRAMEWORKS ────────────────────────────────────────────
@@ -98,9 +98,6 @@ const FRAMEWORKS = {
 };
 
 // ─── MARKDOWN RENDERER ─────────────────────────────────────
-// Handles **bold**, - bullets, 1. numbered lists, and | markdown tables.
-// Used for scenario data sections and all feedback text.
-
 const renderInline = (text) => {
   if (!text) return null;
   const parts = text.split(/(\*\*[^*]+\*\*)/g);
@@ -128,7 +125,6 @@ const renderMarkdown = (text) => {
         tblLines.push(lines[i]);
         i++;
       }
-      // Strip separator rows (e.g. |---|---|)
       const rows = tblLines
         .filter(l => !/^\s*\|[-:\s|]+\|\s*$/.test(l))
         .map(l => l.split('|').map(c => c.trim()).filter(Boolean));
@@ -938,13 +934,9 @@ function PMSimulation() {
   const [startTime, setStartTime] = useState(null);
   const [attemptCount, setAttemptCount] = useState(SEED);
 
-  // ── Refs ──────────────────────────────────────────────────
-  // topRef    → framework box: scroll here when a new question loads
-  // commentaryRef → commentary block: scroll here when answer is selected
   const topRef = useRef(null);
   const commentaryRef = useRef(null);
 
-  // ── Restore session on mount ──────────────────────────────
   useEffect(() => {
     const att = localStorage.getItem(LS('attempted'));
     if (att) { setHasAttempted(true); }
@@ -965,8 +957,6 @@ function PMSimulation() {
     retryFailed();
   }, []);
 
-  // ── Scroll to framework box when a new question renders ───
-  // Fires after React commits: hasStarted (landing→Q1), currentQ (next question), showResults (results page)
   useEffect(() => {
     if (!hasStarted) return;
     if (topRef.current) {
@@ -976,9 +966,6 @@ function PMSimulation() {
     }
   }, [hasStarted, currentQ, showResults]);
 
-  // ── Scroll to commentary when answer selected ─────────────
-  // Fires after React commits the feedback render.
-  // 'instant' so the user lands exactly on the commentary without drift.
   useEffect(() => {
     if (!showFeedback) return;
     if (commentaryRef.current) {
@@ -1000,21 +987,19 @@ function PMSimulation() {
     const now = Date.now();
     localStorage.setItem(LS('startTime'), now.toString());
     setStartTime(now);
-    setHasStarted(true); // → useEffect scrolls to topRef (framework box)
+    setHasStarted(true);
     track('STARTED', { email, device: getDevice(), attemptNumber: 1 });
     retryFailed();
   };
 
-  // Clicking an answer IMMEDIATELY shows feedback — no Submit button.
-  // This triggers useEffect([showFeedback]) → scrolls to commentaryRef.
   const handleSelect = (idx) => {
-    if (showFeedback) return; // already answered, ignore further clicks
+    if (showFeedback) return;
     const q = QUESTIONS[currentQ];
     const chosen = q.answers[idx];
     const newAnswers = [...answers, { questionId: q.id, selectedIdx: idx, points: chosen.points }];
     setSelectedIdx(idx);
     setAnswers(newAnswers);
-    setShowFeedback(true); // → useEffect scrolls to commentaryRef
+    setShowFeedback(true);
     localStorage.setItem(LS('answers'), JSON.stringify(newAnswers));
     if ((currentQ + 1) % 3 === 0) {
       track('PROGRESS', { email, questionNumber: currentQ + 1, totalQuestions: QUESTIONS.length, device: getDevice() });
@@ -1028,12 +1013,12 @@ function PMSimulation() {
       const finalPct = Math.round((finalScore / maxScore) * 100);
       const finalTier = getTier(finalPct).tier;
       localStorage.setItem(LS('attempted'), '1');
-      setShowResults(true); // → useEffect scrolls to top
+      setShowResults(true);
       track('COMPLETED', { email, score: finalScore, percentage: finalPct, tier: finalTier, timeTaken, device: getDevice() });
     } else {
       setShowFeedback(false);
       setSelectedIdx(null);
-      setCurrentQ(currentQ + 1); // → useEffect scrolls to topRef (framework box)
+      setCurrentQ(currentQ + 1);
       localStorage.setItem(LS('question'), (currentQ + 1).toString());
     }
   };
@@ -1247,15 +1232,12 @@ function PMSimulation() {
       )
     ),
     h('div', { className: 'max-w-3xl mx-auto px-4 py-6' },
-
-      // ── topRef lives here — framework box is the first thing seen on each new question ──
       h('div', { ref: topRef, className: 'framework-box mb-6 scroll-target' },
         h('div', { className: 'text-xs font-bold uppercase tracking-widest mb-1', style: { color: fwData.color } }, '⚡ Framework in Focus'),
         h('div', { className: 'font-bold text-white text-lg mb-1' }, fwData.name),
         h('div', { className: 'text-red-300 text-sm font-mono mb-2' }, fwData.formula),
         h('div', { className: 'text-gray-300 text-sm' }, fwData.description)
       ),
-
       h('div', { className: 'bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6' },
         h('div', { className: 'flex items-center gap-2 mb-3' },
           h('span', { className: 'bg-red-100 text-red-600 text-xs font-bold px-3 py-1 rounded-full' }, q.year),
@@ -1266,11 +1248,9 @@ function PMSimulation() {
           h('p', { className: 'font-bold text-gray-800 text-base' }, '❓ ' + q.question)
         )
       ),
-
-      // ── Answer options — A/B/C/D labelled, click = immediate feedback ──
       h('div', { className: 'mb-4' },
         q.answers.map((ans, i) => {
-          const label = String.fromCharCode(65 + i); // A B C D
+          const label = String.fromCharCode(65 + i);
           let cls = 'option-card';
           if (showFeedback) {
             if (i === correctIdx) cls += ' correct';
@@ -1283,7 +1263,6 @@ function PMSimulation() {
           const subText  = ans.text.includes('|') ? ans.text.split('|').slice(1).join(' · ').trim() : null;
           return h('div', { key: i, className: cls, onClick: () => handleSelect(i) },
             h('div', { className: 'flex items-start gap-3' },
-              // Label pill: A/B/C/D before feedback, radio-style dot after
               h('div', { className: `flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold mt-0.5
                 ${showFeedback && i === correctIdx ? 'bg-green-500 text-white' :
                   showFeedback && i === selectedIdx ? 'bg-red-500 text-white' :
@@ -1306,12 +1285,9 @@ function PMSimulation() {
           );
         })
       ),
-
-      // ── Commentary: rendered after answer click ──────────────
       showFeedback && h('div', { ref: commentaryRef, className: 'mb-6 scroll-target' },
-        // Selected answer feedback
         h('div', { className: `rounded-2xl p-5 mb-4 border ${selectedIdx === correctIdx ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}` },
-        h('div', { className: 'flex items-start gap-2 mb-3' },
+          h('div', { className: 'flex items-start gap-2 mb-3' },
             h('span', { className: 'text-xl flex-shrink-0' }, selectedIdx === correctIdx ? '✅' : '❌'),
             h('div', null,
               h('div', { className: 'font-bold text-gray-800 text-sm' },
@@ -1332,7 +1308,6 @@ function PMSimulation() {
             )
           )
         ),
-        // Best answer explanation (only when wrong)
         selectedIdx !== correctIdx && h('div', { className: 'bg-green-50 border border-green-200 rounded-2xl p-5 mb-4' },
           h('div', { className: 'flex items-start gap-2 mb-3' },
             h('span', { className: 'text-xl flex-shrink-0' }, '🏆'),
@@ -1358,8 +1333,6 @@ function PMSimulation() {
           currentQ + 1 < QUESTIONS.length ? 'Next Question →' : 'View My Results 🏆'
         )
       ),
-
-      // ── Pre-answer hint ──
       !showFeedback && h('p', { className: 'text-center text-gray-400 text-sm mt-2' }, '👆 Click an answer to continue')
     )
   );
