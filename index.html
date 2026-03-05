@@ -194,6 +194,13 @@ body{font-family:'Inter',sans-serif;background:var(--light);color:var(--text);li
 .learn-card .learn-example{background:var(--light);border-radius:10px;padding:16px;margin-top:14px;}
 .learn-card .learn-example h4{font-size:.82em;font-weight:700;color:var(--navy);margin-bottom:6px;}
 .learn-card .learn-example p{font-size:.85em;color:var(--muted);margin-bottom:0;font-style:italic;}
+.learn-card .learn-framework{background:#1a1a2e;border-radius:10px;padding:18px 20px;margin-top:14px;border-left:3px solid var(--accent);}
+.learn-card .learn-framework h4{font-size:.82em;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
+.learn-card .learn-framework ol{list-style:none;padding:0;margin:0;counter-reset:fw;}
+.learn-card .learn-framework ol li{counter-increment:fw;font-size:.84em;color:rgba(255,255,255,.75);padding:5px 0;border-bottom:1px solid rgba(255,255,255,.06);line-height:1.5;}
+.learn-card .learn-framework ol li:last-child{border-bottom:none;}
+.learn-card .learn-framework ol li::before{content:counter(fw) ". ";color:var(--accent);font-weight:700;}
+.learn-card .learn-framework ol li span{color:rgba(255,255,255,.4);font-size:.9em;}
 .learn-nav{display:flex;justify-content:space-between;align-items:center;margin-top:24px;}
 .learn-dots{display:flex;gap:8px;}
 .learn-dot{width:10px;height:10px;border-radius:50%;background:var(--border);transition:background .2s;}
@@ -355,6 +362,18 @@ footer a{color:#556677;text-decoration:none;}
         <h4>Example</h4>
         <p>Zomato considers adding a grocery delivery feature. RICE: High reach (millions of users), medium impact (new behaviour), low confidence (unproven demand), high effort (new logistics). The score says: test small before going big.</p>
       </div>
+      <div class="learn-framework">
+        <h4>RICE vs ICE Decision Guide</h4>
+        <ol>
+          <li>Use RICE when <span>— You have real user data for Reach. Enterprise, mature products.</span></li>
+          <li>Use ICE when <span>— Moving fast, early-stage, gut-informed decisions. Speed over precision.</span></li>
+          <li>Reach <span>— (RICE only) Users impacted per quarter. Pull from analytics, not guesses.</span></li>
+          <li>Impact <span>— Effect on target metric per user. Score consistently across all items.</span></li>
+          <li>Confidence <span>— Evidence quality. 100%=A/B tested, 80%=user research, 50%=intuition.</span></li>
+          <li>Effort / Ease <span>— RICE divides by effort (higher=harder). ICE uses ease (higher=easier).</span></li>
+          <li>Calibration Session <span>— Score all items together. Relative ranking matters more than absolute scores.</span></li>
+        </ol>
+      </div>
       <div class="learn-nav">
         <span class="learn-counter">1 of 4</span>
         <div class="learn-dots"><span class="learn-dot active"></span><span class="learn-dot"></span><span class="learn-dot"></span><span class="learn-dot"></span></div>
@@ -374,6 +393,17 @@ footer a{color:#556677;text-decoration:none;}
       <div class="learn-example">
         <h4>Example</h4>
         <p>Zomato launches a subscription service. Must Have: discounted delivery, billing system. Should Have: restaurant-specific perks. Could Have: priority customer support. Won't Have: exclusive menu items (too complex to coordinate).</p>
+      </div>
+      <div class="learn-framework">
+        <h4>MoSCoW Sprint Planning</h4>
+        <ol>
+          <li>Must Have <span>— Sprint fails without these. Core functionality. Non-negotiable.</span></li>
+          <li>Should Have <span>— High value but sprint still viable without. Build if time allows.</span></li>
+          <li>Could Have <span>— Nice additions. First to cut when estimates slip. Backlog for next sprint.</span></li>
+          <li>Won't Have <span>— Explicitly excluded. Prevents scope creep mid-sprint. Document for later.</span></li>
+          <li>Effort Budget <span>— Must = max 60% of sprint capacity. Leaves room for unknowns.</span></li>
+          <li>Daily Re-check <span>— If a Must slips, demote a Should. Never add scope without removing scope.</span></li>
+        </ol>
       </div>
       <div class="learn-nav">
         <span class="learn-counter">2 of 4</span>
@@ -395,6 +425,17 @@ footer a{color:#556677;text-decoration:none;}
         <h4>Example</h4>
         <p>Live order tracking was once a Delighter for Zomato users — "wow, I can see my rider!" Now it's a Basic — users are frustrated if it's missing. Meanwhile, for restaurants, analytics dashboards are still a Delighter most don't expect.</p>
       </div>
+      <div class="learn-framework">
+        <h4>Kano Survey Method</h4>
+        <ol>
+          <li>Functional Question <span>— "If [feature] existed, how would you feel?" (Like / Expect / Neutral / Tolerate / Dislike)</span></li>
+          <li>Dysfunctional Question <span>— "If [feature] did NOT exist, how would you feel?" Same scale.</span></li>
+          <li>Classification Table <span>— Cross-reference answers to classify: Must-Be, Performance, Attractive, Indifferent, Reverse.</span></li>
+          <li>Prioritise by Type <span>— Must-Be first (table stakes). Then Performance (differentiators). Then Attractive (delighters).</span></li>
+          <li>Decay Warning <span>— Today's Attractive becomes tomorrow's Must-Be. Features drift toward expectation over time.</span></li>
+          <li>Sample Size <span>— 20-30 respondents per segment is usually sufficient for clear patterns.</span></li>
+        </ol>
+      </div>
       <div class="learn-nav">
         <span class="learn-counter">3 of 4</span>
         <div class="learn-dots"><span class="learn-dot"></span><span class="learn-dot"></span><span class="learn-dot active"></span><span class="learn-dot"></span></div>
@@ -414,6 +455,18 @@ footer a{color:#556677;text-decoration:none;}
       <div class="learn-example">
         <h4>Example</h4>
         <p>Zomato must decide: lower commission rates to attract more restaurants (improving supply), or offer deeper discounts to attract more customers (improving demand)? The answer depends on which side is the bottleneck in each city.</p>
+      </div>
+      <div class="learn-framework">
+        <h4>Marketplace Flywheel Template</h4>
+        <ol>
+          <li>Supply Acquisition <span>— How do you attract sellers/providers? Incentives, onboarding, tools?</span></li>
+          <li>Demand Generation <span>— How do you attract buyers? Marketing, referrals, organic?</span></li>
+          <li>Matching Quality <span>— How well does the platform connect supply and demand? Relevance, speed?</span></li>
+          <li>Transaction Experience <span>— Payment, delivery, dispute resolution. Friction kills marketplaces.</span></li>
+          <li>Chicken-and-Egg <span>— Which side to subsidise first? Start with the harder side to acquire.</span></li>
+          <li>Flywheel Trigger <span>— At what point does growth become self-reinforcing? Define the metric.</span></li>
+          <li>Take Rate <span>— Commission percentage. Too high = disintermediation. Too low = unsustainable.</span></li>
+        </ol>
       </div>
       <div class="learn-nav">
         <span class="learn-counter">4 of 4</span>
